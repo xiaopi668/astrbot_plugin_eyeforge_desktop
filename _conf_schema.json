@@ -1,0 +1,17 @@
+{
+  "host": {
+    "description": "EyeForge 网关地址",
+    "default": "127.0.0.1",
+    "type": "string"
+  },
+  "port": {
+    "description": "EyeForge 网关端口",
+    "default": 9178,
+    "type": "int"
+  },
+  "token": {
+    "description": "WebSocket 认证令牌（可选）",
+    "default": "",
+    "type": "string"
+  }
+}

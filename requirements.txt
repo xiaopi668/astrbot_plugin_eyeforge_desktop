@@ -1,0 +1,1 @@
+# EyeForge Desktop Plugin - 无额外依赖

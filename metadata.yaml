@@ -1,0 +1,14 @@
+name: astrbot_plugin_eyeforge_desktop
+display_name: EyeForge Desktop
+desc: 连接 EyeForge 桌面助手，截图查看桌面、模拟鼠标键盘操作、接入 AI 群组
+help: |
+  命令：
+    /screen - 查看桌面截图
+    /click <x> <y> - 在桌面坐标 (x,y) 处点击
+    /type <text> - 输入文本
+    /scroll <dx> <dy> - 滚动
+    /hotkey <key1> <key2> ... - 模拟快捷键
+    /ai-group <message> - 向 AI 群组发送消息
+version: v1.0.0
+author: EyeForge
+repo: https://github.com/EyeForge/astrbot_plugin_eyeforge_desktop
