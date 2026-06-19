@@ -192,6 +192,60 @@ class EyeForgeDesktopPlugin(Star):
                 "  /ai_group send <消息>"
             )
 
+    @filter.command("model")
+    async def model(self, event: AstrMessageEvent, action: str = "", name: str = ""):
+        """模型管理
+        用法:
+          /model list   - 查看可用后端
+          /model status - 查看加载状态
+          /model load <后端名> - 加载模型
+        """
+        if action == "list":
+            result = _request("GET", "/api/model/list")
+            if isinstance(result, list):
+                lines = ["🤖 可用模型后端:"]
+                for b in result:
+                    status = "✅" if b.get("available") else "⬜"
+                    fmts = ", ".join(b.get("formats", []))
+                    lines.append(f"  {status} {b['name']}  [{fmts}]")
+                yield event.plain_result("
+".join(lines))
+            else:
+                yield event.plain_result(f"获取失败: {result}")
+        elif action == "status":
+            result = _request("GET", "/api/model/status")
+            if result.get("success"):
+                backends = result.get("loaded_backends", [])
+                yield event.plain_result(
+                    f"已加载后端 ({len(backends)}):
+" +
+                    "
+".join(f"  ✅ {b}" for b in backends) +
+                    f"
+📚 知识库条目: {result.get('kb_count', 0)}"
+                )
+            else:
+                yield event.plain_result(f"获取失败: {result.get('error', '未知错误')}")
+        elif action == "load" and name:
+            result = _request("POST", "/api/model/load", {
+                "backend": name, "device": "auto",
+            })
+            yield event.plain_result(
+                f"✅ {result.get('message', '加载请求已发送')}"
+                if result.get("success")
+                else f"加载失败: {result.get('error', '未知错误')}"
+            )
+        else:
+            yield event.plain_result(
+                "用法:
+"
+                "  /model list
+"
+                "  /model status
+"
+                "  /model load <后端名>"
+            )
+
     @filter.command("ef")
     async def help(self, event: AstrMessageEvent):
         """EyeForge 插件帮助"""
