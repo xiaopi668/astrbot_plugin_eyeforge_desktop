@@ -2,6 +2,8 @@
 
 连接 EyeForge 桌面助手，让 AI 能看到你的电脑屏幕并做出操作。
 
+**EyeForge 主仓库：** [xiaopi668/EyeForge](https://github.com/xiaopi668/EyeForge)
+
 ## 功能
 
 | 命令 | 功能 |
