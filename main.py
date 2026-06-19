@@ -1,13 +1,23 @@
 """
 EyeForge Desktop - AstrBot Plugin
 """
-import base64, json, re, urllib.request, urllib.error
+import base64, json, os, re, tempfile, urllib.request, urllib.error
 from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.star import Context, Star
 
 HOST = "127.0.0.1"
 PORT = 9178
 TOKEN = ""
+
+def save_b64_image(b64_str):
+    try:
+        data = base64.b64decode(b64_str)
+        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
+        tmp.write(data)
+        tmp.close()
+        return tmp.name
+    except:
+        return None
 
 def api(path):
     return f"http://{HOST}:{PORT}{path}"
@@ -37,8 +47,12 @@ class EyeForgeDesktopPlugin(Star):
     async def screen(self, event: AstrMessageEvent):
         r = req("GET", "/api/screenshot")
         if r.get("success"):
-            yield event.image_result(r["data"])
-            yield event.plain_result(f"桌面截图 ({r.get('width',0)}x{r.get('height',0)})")
+            path = save_b64_image(r["data"])
+            if path:
+                yield event.image_result(path)
+                yield event.plain_result(f"桌面截图 ({r.get('width',0)}x{r.get('height',0)})")
+            else:
+                yield event.plain_result("截图保存失败")
         else:
             yield event.plain_result(f"截图失败: {r.get('error','?')}")
 
